@@ -14,13 +14,13 @@
             margin: 0 auto; 
             padding: 20px; 
             text-align: center; 
-            background-color: #e8f5e9; /* Ana arka plan: Çok açık yeşil */
+            background-color: #e8f5e9; 
             font-family: 'Segoe UI', 'Georgia', serif; 
-            color: #1b5e20; /* Genel yazı rengi: Koyu yeşil */
+            color: #1b5e20; 
         }
 
         .container { 
-            background: #ffffff; /* Beyaz kart */
+            background: #ffffff; 
             padding: 40px 30px; 
             border-radius: 15px; 
             box-shadow: 0 10px 25px rgba(27, 94, 32, 0.15); 
@@ -50,8 +50,8 @@
            BUTON TASARIMI
         ========================================= */
         .btn-primary { 
-            background-color: #2e7d32; /* Buton rengi: Koyu yeşil */
-            color: white !important; /* Yazı rengi: Beyaz (Zorunlu) */
+            background-color: #2e7d32; 
+            color: white !important; 
             width: 100%; 
             padding: 15px; 
             font-size: 1.2rem; 
@@ -67,12 +67,12 @@
         .btn-primary:disabled { background-color: #a5d6a7; cursor: not-allowed; transform: none; color: #e8f5e9 !important; }
 
         /* =========================================
-           ÇIKTI KUTUSU (ŞİİR ALANI) - MOBİL DÜZELTMELERİ BURADA
+           ÇIKTI KUTUSU (ŞİİR ALANI) - MOBİL DÜZELTMELERİ (V7)
         ========================================= */
         #output { 
             text-align: left; 
-            background: #f9fbe7; /* Çıktı zemini: Sarımtırak açık yeşil */
-            color: #004d40; /* Yazı rengi: Koyu petrol yeşili */
+            background: #f9fbe7; 
+            color: #004d40; 
             padding: 25px; 
             border-radius: 10px; 
             margin-top: 25px; 
@@ -81,22 +81,38 @@
             font-size: 1.15em; 
             border-left: 5px solid #2e7d32; 
             box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-            white-space: pre-wrap; /* Şiir formatını korur */
+            white-space: pre-wrap; 
         }
 
-        /* MOBİL DÜZELTME 1: Başlıkların Rengi */
-        /* "Orijinal Metin", "Günümüz Türkçesi" gibi başlıkların rengini koyu yeşil olarak sabitler */
+        /* DÜZELTME 1: Başlıkların Rengi (Kesinleştirilmiş) */
+        /* !important ile diğer tüm temaları eziyoruz ve gölgeyi kaldırıyoruz */
         #output h1, #output h2, #output h3, #output h4, #output h5, #output h6 {
             color: #2e7d32 !important;
-            margin-top: 25px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            text-shadow: none !important; 
+            font-weight: bold;
         }
 
-        /* MOBİL DÜZELTME 2: Tablo (Lügatçe) Renkleri */
-        /* Tablodaki tüm satırların ve hücrelerin arka planını şeffaf, yazı rengini koyu yeşil yapar */
+        /* DÜZELTME 2: Tablo Okunabilirliği */
+        #output table {
+            width: 100%; border-collapse: collapse; margin-top: 15px;
+        }
+        /* Tüm hücrelerin arka planını temizle */
         #output table tr, #output table th, #output table td {
-            background-color: transparent !important;
-            color: #004d40 !important;
-            border-color: #c8e6c9; /* Tablo çizgileri */
+            background-color: transparent !important; border: none; padding: 10px 5px;
+        }
+        /* Her satırın altına ince bir çizgi çek */
+        #output table tr {
+            border-bottom: 1px solid #dcedc8;
+        }
+        /* İlk sütunu (Kelime) KALIN ve daha koyu yap */
+        #output table td:first-child, #output table th:first-child {
+            font-weight: bold; color: #1b5e20 !important; padding-right: 15px; white-space: nowrap;
+        }
+        /* İkinci sütunu (Anlam) normal bırak */
+        #output table td:nth-child(2), #output table th:nth-child(2) {
+             color: #004d40 !important;
         }
 
         /* =========================================
@@ -249,7 +265,7 @@
                 (Çeviriyi mısra mısra, alt alta, şiir gibi yaz.)
                 
                 ### 📖 Lügatçe
-                (Bilinmeyen kelimeleri tablo veya madde madde açıkla.)
+                (Bilinmeyen kelimeleri tablo olarak ver: | Kelime | Anlamı |)
             `;
 
             const result = await model.generateContent([prompt, base64Data]);
