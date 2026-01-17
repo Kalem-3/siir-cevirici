@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İlahi ve Şiir Tercümanı</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <style>
+        /* GENEL TASARIM */
+        body { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            text-align: center; 
+            background-color: #e8f5e9; 
+            font-family: 'Segoe UI', 'Georgia', serif; 
+            color: #1b5e20; 
+        }
+
+        .container { 
+            background: #ffffff; 
+            padding: 40px 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(27, 94, 32, 0.15); 
+            border: 1px solid #c8e6c9; 
+        }
+
+        h1 { color: #2e7d32; font-family: 'Georgia', serif; letter-spacing: 1px; margin-bottom: 30px; }
+
+        .hidden { display: none !important; }
+
+        /* FOTOĞRAF KUTUSU */
+        .box { 
+            border: 2px dashed #66bb6a; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin: 20px 0; 
+            background: #f1f8e9; 
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .box:hover { background-color: #dcedc8; }
+
+        /* BUTONLAR */
+        .btn-primary { 
+            background-color: #2e7d32; 
+            color: white; 
+            width: 100%; 
+            padding: 15px; 
+            font-size: 1.2rem; 
+            margin-top: 15px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-weight: bold; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-primary:hover { background-color: #1b5e20; transform: translateY(-2px); }
+        .btn-primary:disabled { background-color: #a5d6a7; cursor: not-allowed; transform: none; }
+
+        /* ÇIKTI KUTUSU (Şiir Formatı İçin Kritik Ayarlar) */
+        #output { 
+            text-align: left; 
+            background: #f9fbe7; 
+            color: #004d40; 
+            padding: 25px; 
+            border-radius: 10px; 
+            margin-top: 25px; 
+            font-family: 'Georgia', serif; 
+            line-height: 1.8; 
+            font-size: 1.15em; 
+            border-left: 5px solid #2e7d32; 
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            /* Şiir satırlarının korunması için hayati kod: */
+            white-space: pre-wrap; 
+        }
+
+        /* Sabit Metinler */
+        .dervis-sozu {
+            font-style: italic; color: #2e7d32; font-weight: bold;
+            margin-bottom: 15px; display: block; border-bottom: 1px solid #c8e6c9; padding-bottom: 10px;
+        }
+        .dervis-bitis {
+            font-style: italic; color: #2e7d32; font-weight: bold;
+            margin-top: 20px; display: block; border-top: 1px solid #c8e6c9; padding-top: 10px; text-align: right;
+        }
+        
+        /* Giriş Ekranı */
+        #loginSection { padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        #passwordInput { 
+            width: 100%; max-width: 300px; padding: 12px; font-size: 1.1rem; text-align: center; 
+            border: 2px solid #a5d6a7; border-radius: 8px; margin-bottom: 15px; background: #fff; color: #1b5e20; display: block; 
+        }
+        #passwordInput:focus { outline: none; border-color: #2e7d32; }
+        #preview { max-width: 100%; border-radius: 8px; margin-top: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .loading-spinner { font-size: 1.2rem; color: #2e7d32; font-style: italic; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🍃 İlahi ve Şiir Tercümanı</h1>
+
+    <div id="loginSection">
+        <p style="font-weight: bold; color: #388e3c; margin-bottom: 15px;">Lütfen parola giriniz:</p>
+        <input type="password" id="passwordInput" placeholder="......" onkeyup="enterBasincaGiris(event)">
+        <button onclick="sifreKontrol()" class="btn-primary" style="max-width: 300px;">Giriş Yap</button>
+        <p id="errorMsg" style="color: #c62828; display: none; margin-top: 10px;">🛑 Hatalı parola!</p>
+    </div>
+
+    <div id="appSection" class="hidden">
+        <p style="font-style: italic; color: #558b2f; margin-bottom: 20px;">
+            "Destur Efendim, Osmanlıca veya Eski Dilli İlahilerin günümüz Türkçesine çevrilmesi için fotoğraf çekin ya da yükleyin."
+        </p>
+
+        <div class="box">
+            <label for="fileInput" style="display: block;">
+                📷 <span style="font-weight: bold; text-decoration: underline;">Fotoğraf Seçmek İçin Tıklayın</span>
+            </label>
+            <input type="file" id="fileInput" accept="image/*" capture="environment" style="display: none;">
+            <img id="preview" class="hidden">
+        </div>
+        
+        <button onclick="cevir()" class="btn-primary" id="translateBtn">✨ Tercümeyi Başlat</button>
+        
+        <div id="status" class="hidden loading-spinner">
+            ⏳ Metin inceleniyor...<br>Eski harfler çözülüyor...<br>Manası gönül diline dökülüyor...
+        </div>
+
+        <div id="output" class="hidden"></div>
+    </div>
+</div>
+
+<script type="module">
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+    import { marked } from "https://esm.run/marked";
+
+    // AYARLAR
+    const _p1 = "AIzaSyBLd-KNzpSq";
+    const _p2 = "UwiBibbL89-6V8-ilOFkUoc";
+    const _sistem_giris_kodu = "aHpzYXVuYXN1bHRhbg=="; 
+
+    // SABİT METİNLER
+    const SABIT_BASLANGIC = "Destur Efendim, fakir aradığınız ilahimizi bu şekilde günümüz türkçesine çevirebildim. Bir hata, kusur olduysa affınıza sığınırım.";
+    const SABIT_BITIS = "Allah Eyvallah Sultanım. Huuu huu.";
+
+    window.sifreKontrol = function() {
+        const girilen = document.getElementById("passwordInput").value;
+        const errorMsg = document.getElementById("errorMsg");
+        const loginSec = document.getElementById("loginSection");
+        const appSec = document.getElementById("appSection");
+
+        if (btoa(girilen) === _sistem_giris_kodu) {
+            loginSec.classList.add("hidden"); 
+            appSec.classList.remove("hidden"); 
+        } else {
+            errorMsg.style.display = "block";
+            document.getElementById("passwordInput").style.borderColor = "#c62828";
+            document.getElementById("passwordInput").value = ""; 
+        }
+    }
+
+    window.enterBasincaGiris = function(event) {
+        if (event.key === "Enter") { window.sifreKontrol(); }
+    }
+
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('preview');
+                img.src = e.target.result;
+                img.classList.remove("hidden");
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    window.cevir = async function() {
+        const fileInput = document.getElementById('fileInput');
+        const status = document.getElementById('status');
+        const output = document.getElementById('output');
+        const btn = document.getElementById('translateBtn');
+
+        if (fileInput.files.length === 0) { alert("Lütfen önce bir fotoğraf seçin!"); return; }
+
+        status.classList.remove("hidden");
+        output.classList.add("hidden");
+        output.innerHTML = "";
+        btn.disabled = true;
+        btn.innerText = "Tercüme Ediliyor...";
+
+        try {
+            const _final_token = _p1 + _p2;
+            const genAI = new GoogleGenerativeAI(_final_token);
+            const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+
+            const file = fileInput.files[0];
+            const base64Data = await fileToGenerativePart(file);
+
+            const prompt = `
+                Sen edep sahibi bir dervişsin. Bu şiiri/ilahiyi oku ve çevir.
+                
+                ÖNEMLİ KURALLAR:
+                1. Giriş ve bitiş cümlesi YAZMA (Onları ben ekleyeceğim).
+                2. Şiir formatını ASLA bozma.
+                3. Çeviriyi DÖRTLÜK (KITA) şeklinde yap. Her mısradan sonra mutlaka alt satıra geç.
+                4. Düzyazı veya paragraf kullanma.
+                
+                Çıktı Formatı:
+
+                ### 📜 Orijinal Metin
+                (Metni mısra mısra, alt alta yaz.)
+
+                ### 🇹🇷 Günümüz Türkçesi
+                (Çeviriyi mısra mısra, alt alta, şiir gibi yaz.)
+                
+                ### 📖 Lügatçe
+                (Kelimeler)
+            `;
+
+            const result = await model.generateContent([prompt, base64Data]);
+            const response = await result.response;
+            const text = response.text(); 
+
+            // MONTAJ VE FORMATLAMA (Burası Değişti)
+            // { breaks: true } sayesinde her satır atlaması <br> etiketi sayılacak.
+            const parsedText = marked.parse(text, { breaks: true });
+
+            const finalHTML = `
+                <span class="dervis-sozu">${SABIT_BASLANGIC}</span>
+                ${parsedText}
+                <span class="dervis-bitis">${SABIT_BITIS}</span>
+            `;
+
+            output.innerHTML = finalHTML;
+            output.classList.remove("hidden");
+
+        } catch (error) {
+            console.error(error);
+            let hataMesaji = "Bir hata oluştu: " + error.message;
+            if (error.message.includes("429")) {
+                hataMesaji = "Hata: Kota doldu. Lütfen biraz bekleyip tekrar deneyin.";
+            }
+            output.innerHTML = `<span style="color:red;">${hataMesaji}</span>`;
+            output.classList.remove("hidden");
+        } finally {
+            status.classList.add("hidden");
+            btn.disabled = false;
+            btn.innerText = "✨ Tercümeyi Başlat";
+        }
+    }
+
+    async function fileToGenerativePart(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve({
+                inlineData: { data: reader.result.split(',')[1], mimeType: file.type },
+            });
+            reader.readAsDataURL(file);
+        });
+    }
+</script>
+
+</body>
+</html>
