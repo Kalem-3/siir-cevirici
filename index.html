@@ -12,7 +12,7 @@
         body { 
             max-width: 800px; 
             margin: 0 auto; 
-            padding: 15px; /* Mobilde kenar boşluğunu azalttık */
+            padding: 15px;
             text-align: center; 
             background-color: #e8f5e9; 
             font-family: 'Segoe UI', 'Georgia', serif; 
@@ -30,9 +30,7 @@
         h1 { color: #2e7d32; font-family: 'Georgia', serif; letter-spacing: 1px; margin-bottom: 20px; font-size: 1.8rem; }
         .hidden { display: none !important; }
 
-        /* =========================================
-           FOTOĞRAF KUTUSU
-        ========================================= */
+        /* FOTOĞRAF KUTUSU */
         .box { 
             border: 2px dashed #66bb6a; 
             padding: 20px; 
@@ -43,9 +41,7 @@
         }
         #preview { max-width: 100%; border-radius: 8px; margin-top: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
 
-        /* =========================================
-           BUTONLAR
-        ========================================= */
+        /* BUTONLAR */
         .btn-primary { 
             background-color: #2e7d32; 
             color: white !important; 
@@ -62,7 +58,7 @@
         .btn-primary:disabled { background-color: #a5d6a7; cursor: not-allowed; }
 
         /* =========================================
-           ÇIKTI KUTUSU - MOBİL SORUNU ÇÖZÜMÜ (V8)
+           ÇIKTI KUTUSU
         ========================================= */
         #output { 
             text-align: left; 
@@ -76,15 +72,13 @@
             border-left: 5px solid #2e7d32; 
             box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
             
-            /* MOBİL ÜST ÜSTE BİNME SORUNU İÇİN KRİTİK KODLAR: */
-            white-space: pre-wrap;       /* Satır sonlarını korur ama uzun satırları böler */
-            word-wrap: break-word;       /* Uzun kelimeleri kırar */
-            overflow-wrap: break-word;   /* Modern tarayıcılar için kırma */
-            word-break: break-word;      /* Güvenlik önlemi */
-            line-height: 1.8;            /* Satır arasını açtık ki harfler çakışmasın */
+            /* Mobil Uyumluluk */
+            white-space: pre-wrap;       
+            word-wrap: break-word;       
+            overflow-wrap: break-word;   
+            line-height: 1.8;            
         }
 
-        /* Başlıklar */
         #output h3 {
             color: #2e7d32 !important;
             margin-top: 30px;
@@ -95,26 +89,38 @@
         }
 
         /* =========================================
-           YENİ ÖZELLİK: RENKLİ KELİME VURGUSU
+           YENİ VURGU TASARIMI (V9)
+           Sarı Zemin + Koyu Yeşil Kalın Yazı
         ========================================= */
-        /* Yapay zeka değiştirilen kelimeyi **kalın** yapacak, biz de onu boyayacağız */
         #output strong {
-            color: #d84315; /* Kiremit Rengi / Koyu Turuncu */
-            font-weight: 700;
-            text-decoration: underline; /* Altını çizelim ki belli olsun */
-            text-decoration-color: #ffccbc;
-            text-decoration-style: dotted; /* Noktalı alt çizgi */
+            background-color: #fff59d; /* Fosforlu Sarımsı */
+            color: #1b5e20; /* Koyu Yeşil Yazı */
+            font-weight: 800; /* Ekstra Kalın */
+            padding: 2px 6px; /* Etrafına biraz boşluk */
+            border-radius: 4px; /* Köşeleri yuvarlat */
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-        /* Tablo Düzeni */
+        /* =========================================
+           TABLO DÜZELTMESİ (Zebra Deseni İptali)
+        ========================================= */
         #output table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
-        #output table tr { border-bottom: 1px solid #dcedc8; }
-        #output table td, #output table th { 
-            background-color: transparent !important; 
-            padding: 8px 5px; 
-            vertical-align: top;
-            word-wrap: break-word; /* Tablo içinde de taşmayı engelle */
+        #output table tr { 
+            border-bottom: 1px solid #dcedc8; 
+            background-color: transparent !important; /* Arka planı temizle */
         }
+        #output table td, #output table th { 
+            background-color: transparent !important; /* Hücreleri temizle */
+            padding: 10px 5px; 
+            vertical-align: top;
+            word-wrap: break-word;
+            color: #004d40 !important;
+        }
+        /* Zebra striping override (Water.css'i ezer) */
+        #output table tr:nth-child(even), #output table tr:nth-child(odd) {
+            background-color: transparent !important;
+        }
+
         #output table td:first-child { 
             font-weight: bold; color: #1b5e20 !important; width: 40%; 
         }
@@ -126,7 +132,9 @@
         /* Giriş Ekranı */
         #loginSection { padding: 20px; display: flex; flex-direction: column; align-items: center; }
         #passwordInput { width: 100%; max-width: 250px; padding: 12px; text-align: center; border: 2px solid #a5d6a7; border-radius: 8px; margin-bottom: 15px; background: #fff; color: #1b5e20; display: block; }
-        .loading-spinner { font-size: 1.1rem; color: #2e7d32; font-style: italic; margin-top: 20px; }
+        
+        /* Yükleniyor Yazısı */
+        .loading-spinner { font-size: 1.1rem; color: #2e7d32; font-style: italic; margin-top: 20px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -157,7 +165,7 @@
         <button onclick="cevir()" class="btn-primary" id="translateBtn">✨ Tercümeyi Başlat</button>
         
         <div id="status" class="hidden loading-spinner">
-            ⏳ Metin inceleniyor...<br>Kelimeler günümüze uyarlanıyor...
+            ⏳ Metin inceleniyor...<br>Eski harfler çözülüyor...<br>Manası gönül diline dökülüyor...
         </div>
 
         <div id="output" class="hidden"></div>
@@ -173,8 +181,8 @@
     const _p2 = "UwiBibbL89-6V8-ilOFkUoc";
     const _sistem_giris_kodu = "aHpzYXVuYXN1bHRhbg=="; 
 
-    // SABİT METİNLER
-    const SABIT_BASLANGIC = "Destur Efendim, fakir aradığınız ilahiyi günümüz Türkçesiyle harmanlayıp arz ettim. Değişen kelimeleri renkli belirttim.";
+    // SABİT METİNLER (KESİN İTAAT)
+    const SABIT_BASLANGIC = "Destur Efendim, fakir aradığınız ilahimizi bu şekilde günümüz türkçesine çevirebildim. Bir hata, kusur olduysa affınıza sığınırım.";
     const SABIT_BITIS = "Allah Eyvallah Sultanım. Huuu huu.";
 
     window.sifreKontrol = function() {
@@ -233,23 +241,31 @@
             const base64Data = await fileToGenerativePart(file);
 
             const prompt = `
-                Sen edep sahibi bir dervişsin. Görevin görseldeki şiiri okumak ve günümüz insanının anlaması için uyarlamaktır.
+                Sen edep sahibi bir dervişsin. Görevin görseldeki şiiri okumak ve günümüz insanının anlaması için çevirmektir.
                 
                 ÖNEMLİ KURALLAR:
-                1. Giriş/Bitiş cümlesi YAZMA.
+                1. Giriş/Bitiş cümlesi YAZMA (Onları ben ekleyeceğim).
                 2. Şiiri DÖRTLÜK (KITA) formatında, alt alta mısralar halinde yaz.
                 
-                YAPILACAK İŞLEM (ÇOK ÖNEMLİ):
-                - Şiirin içindeki eski/Osmanlıca kelimeleri tespit et.
-                - O kelimeyi sil ve yerine günümüz Türkçesindeki en uygun karşılığını yaz.
-                - **DİKKAT:** Değiştirip yerine koyduğun yeni kelimeyi mutlaka **iki yıldız** içine alarak kalın yap. (Örnek: "Şal-i fena" yerine **Yokluk örtüsü** yaz).
-                - Cümlenin geri kalanı (anlaşılır kısımlar) aynen kalsın.
+                YAPILACAK İŞLEM (VURGU VE ÇEVİRİ):
+                
+                BÖLÜM 1: Orijinal Metin
+                - Şiirin orijinal halini yaz.
+                - Şiirdeki eski/ağır Osmanlıca kelimeleri tespit et ve onları **iki yıldız** içine al.
+                
+                BÖLÜM 2: Günümüz Türkçesi
+                - Şiiri günümüz Türkçesine çevir.
+                - Orijinalde işaretlediğin eski kelimelerin yerine, bu bölümde günümüz Türkçesi karşılıklarını koy.
+                - Koyduğun bu YENİ kelimeleri de mutlaka **iki yıldız** içine al.
                 
                 Çıktı Formatı:
 
-                ### 📜 Günümüz Türkçesiyle Harmanlanmış Hali
-                (Buraya şiiri yaz. Eski kelimeleri çıkar, yerlerine **yeni karşılıklarını** koy. Değişen kelimeler koyu olsun.)
+                ### 📜 Orijinal Metin
+                (Eski kelimeler **yıldızlı** olsun)
 
+                ### 🇹🇷 Günümüz Türkçesi
+                (Yerine gelen yeni kelimeler **yıldızlı** olsun)
+                
                 ### 📖 Lügatçe
                 (Değiştirdiğin kelimeleri tablo olarak ver: | Eski Hali | Yeni Hali |)
             `;
