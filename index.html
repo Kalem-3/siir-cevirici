@@ -6,19 +6,21 @@
     <title>İlahi ve Şiir Tercümanı</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
     <style>
-        /* GENEL TASARIM */
+        /* =========================================
+           GENEL SAYFA VE KUTU TASARIMI
+        ========================================= */
         body { 
             max-width: 800px; 
             margin: 0 auto; 
             padding: 20px; 
             text-align: center; 
-            background-color: #e8f5e9; 
+            background-color: #e8f5e9; /* Ana arka plan: Çok açık yeşil */
             font-family: 'Segoe UI', 'Georgia', serif; 
-            color: #1b5e20; 
+            color: #1b5e20; /* Genel yazı rengi: Koyu yeşil */
         }
 
         .container { 
-            background: #ffffff; 
+            background: #ffffff; /* Beyaz kart */
             padding: 40px 30px; 
             border-radius: 15px; 
             box-shadow: 0 10px 25px rgba(27, 94, 32, 0.15); 
@@ -29,7 +31,9 @@
 
         .hidden { display: none !important; }
 
-        /* FOTOĞRAF KUTUSU */
+        /* =========================================
+           FOTOĞRAF YÜKLEME ALANI
+        ========================================= */
         .box { 
             border: 2px dashed #66bb6a; 
             padding: 20px; 
@@ -40,11 +44,14 @@
             transition: 0.3s;
         }
         .box:hover { background-color: #dcedc8; }
+        #preview { max-width: 100%; border-radius: 8px; margin-top: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
 
-        /* BUTONLAR */
+        /* =========================================
+           BUTON TASARIMI
+        ========================================= */
         .btn-primary { 
-            background-color: #2e7d32; 
-            color: white; 
+            background-color: #2e7d32; /* Buton rengi: Koyu yeşil */
+            color: white !important; /* Yazı rengi: Beyaz (Zorunlu) */
             width: 100%; 
             padding: 15px; 
             font-size: 1.2rem; 
@@ -57,13 +64,15 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         .btn-primary:hover { background-color: #1b5e20; transform: translateY(-2px); }
-        .btn-primary:disabled { background-color: #a5d6a7; cursor: not-allowed; transform: none; }
+        .btn-primary:disabled { background-color: #a5d6a7; cursor: not-allowed; transform: none; color: #e8f5e9 !important; }
 
-        /* ÇIKTI KUTUSU (Şiir Formatı İçin Kritik Ayarlar) */
+        /* =========================================
+           ÇIKTI KUTUSU (ŞİİR ALANI) - MOBİL DÜZELTMELERİ BURADA
+        ========================================= */
         #output { 
             text-align: left; 
-            background: #f9fbe7; 
-            color: #004d40; 
+            background: #f9fbe7; /* Çıktı zemini: Sarımtırak açık yeşil */
+            color: #004d40; /* Yazı rengi: Koyu petrol yeşili */
             padding: 25px; 
             border-radius: 10px; 
             margin-top: 25px; 
@@ -72,11 +81,27 @@
             font-size: 1.15em; 
             border-left: 5px solid #2e7d32; 
             box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-            /* Şiir satırlarının korunması için hayati kod: */
-            white-space: pre-wrap; 
+            white-space: pre-wrap; /* Şiir formatını korur */
         }
 
-        /* Sabit Metinler */
+        /* MOBİL DÜZELTME 1: Başlıkların Rengi */
+        /* "Orijinal Metin", "Günümüz Türkçesi" gibi başlıkların rengini koyu yeşil olarak sabitler */
+        #output h1, #output h2, #output h3, #output h4, #output h5, #output h6 {
+            color: #2e7d32 !important;
+            margin-top: 25px;
+        }
+
+        /* MOBİL DÜZELTME 2: Tablo (Lügatçe) Renkleri */
+        /* Tablodaki tüm satırların ve hücrelerin arka planını şeffaf, yazı rengini koyu yeşil yapar */
+        #output table tr, #output table th, #output table td {
+            background-color: transparent !important;
+            color: #004d40 !important;
+            border-color: #c8e6c9; /* Tablo çizgileri */
+        }
+
+        /* =========================================
+           SABİT METİNLER (Derviş Sözleri)
+        ========================================= */
         .dervis-sozu {
             font-style: italic; color: #2e7d32; font-weight: bold;
             margin-bottom: 15px; display: block; border-bottom: 1px solid #c8e6c9; padding-bottom: 10px;
@@ -85,16 +110,17 @@
             font-style: italic; color: #2e7d32; font-weight: bold;
             margin-top: 20px; display: block; border-top: 1px solid #c8e6c9; padding-top: 10px; text-align: right;
         }
+        .loading-spinner { font-size: 1.2rem; color: #2e7d32; font-style: italic; margin-top: 20px; }
         
-        /* Giriş Ekranı */
+        /* =========================================
+           GİRİŞ EKRANI
+        ========================================= */
         #loginSection { padding: 20px; display: flex; flex-direction: column; align-items: center; }
         #passwordInput { 
             width: 100%; max-width: 300px; padding: 12px; font-size: 1.1rem; text-align: center; 
             border: 2px solid #a5d6a7; border-radius: 8px; margin-bottom: 15px; background: #fff; color: #1b5e20; display: block; 
         }
         #passwordInput:focus { outline: none; border-color: #2e7d32; }
-        #preview { max-width: 100%; border-radius: 8px; margin-top: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-        .loading-spinner { font-size: 1.2rem; color: #2e7d32; font-style: italic; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -136,7 +162,9 @@
     import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
     import { marked } from "https://esm.run/marked";
 
-    // AYARLAR
+    // ==========================================
+    // AYARLAR (KODLANMIŞ)
+    // ==========================================
     const _p1 = "AIzaSyBLd-KNzpSq";
     const _p2 = "UwiBibbL89-6V8-ilOFkUoc";
     const _sistem_giris_kodu = "aHpzYXVuYXN1bHRhbg=="; 
@@ -145,6 +173,9 @@
     const SABIT_BASLANGIC = "Destur Efendim, fakir aradığınız ilahimizi bu şekilde günümüz türkçesine çevirebildim. Bir hata, kusur olduysa affınıza sığınırım.";
     const SABIT_BITIS = "Allah Eyvallah Sultanım. Huuu huu.";
 
+    // ==========================================
+    // FONKSİYONLAR
+    // ==========================================
     window.sifreKontrol = function() {
         const girilen = document.getElementById("passwordInput").value;
         const errorMsg = document.getElementById("errorMsg");
@@ -218,15 +249,14 @@
                 (Çeviriyi mısra mısra, alt alta, şiir gibi yaz.)
                 
                 ### 📖 Lügatçe
-                (Kelimeler)
+                (Bilinmeyen kelimeleri tablo veya madde madde açıkla.)
             `;
 
             const result = await model.generateContent([prompt, base64Data]);
             const response = await result.response;
             const text = response.text(); 
 
-            // MONTAJ VE FORMATLAMA (Burası Değişti)
-            // { breaks: true } sayesinde her satır atlaması <br> etiketi sayılacak.
+            // Şiir formatı için satır sonlarını koru
             const parsedText = marked.parse(text, { breaks: true });
 
             const finalHTML = `
